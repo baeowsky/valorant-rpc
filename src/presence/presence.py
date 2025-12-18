@@ -53,7 +53,9 @@ class Presence:
         while True:
             presence_data = self.client.fetch_presence()
             if presence_data is not None:
-                self.update_presence(presence_data["sessionLoopState"],presence_data)
+                match_data = presence_data.get("matchPresenceData", {})
+                session_loop_state = match_data.get("sessionLoopState") or presence_data.get("sessionLoopState", "MENUS")
+                self.update_presence(session_loop_state, presence_data)
                 # print(presence_data)
             else:
                 os._exit(1)
@@ -71,7 +73,9 @@ class Presence:
             presence_data = self.client.fetch_presence()
 
             if presence_data is not None:
-                self.update_presence(presence_data["sessionLoopState"],presence_data)
+                match_data = presence_data.get("matchPresenceData", {})
+                session_loop_state = match_data.get("sessionLoopState") or presence_data.get("sessionLoopState", "MENUS")
+                self.update_presence(session_loop_state, presence_data)
                 
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)

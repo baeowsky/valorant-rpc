@@ -4,7 +4,10 @@ from ....localization.localization import Localizer
 from .away import presence as away
 
 def presence(rpc,client=None,data=None,content_data=None,config=None):
-    is_afk = data["isIdle"]
+    if data is None:
+        return
+    
+    is_afk = data.get("isIdle", False)
     if is_afk:
         away(rpc,client,data,content_data,config)  
      
@@ -14,17 +17,18 @@ def presence(rpc,client=None,data=None,content_data=None,config=None):
         small_text = mode_name
         buttons = Utilities.get_join_state(client,config,data)
 
-        if data["queueId"] == "competitive" and Localizer.get_config_value("presences","menu","show_rank_in_comp_lobby"): 
+        queue_id = data.get("queueId", "")
+        if queue_id == "competitive" and Localizer.get_config_value("presences","menu","show_rank_in_comp_lobby"): 
             small_image, small_text = Utilities.fetch_rank_data(client,content_data)
 
         rpc.update(
             state=party_state,
             details=f"{Localizer.get_localized_text('presences','client_states','menu')} - {mode_name}",
             large_image="game_icon",
-            large_text=f"{Localizer.get_localized_text('presences','leveling','level')} {data['accountLevel']}",
+            large_text=f"{Localizer.get_localized_text('presences','leveling','level')} {data.get('playerPresenceData', {}).get('accountLevel', '?')}",
             small_image=small_image,
             small_text=small_text,
             party_size=party_size,
-            party_id=data["partyId"],
+            party_id=data.get("partyId", ""),
             buttons=buttons
         )

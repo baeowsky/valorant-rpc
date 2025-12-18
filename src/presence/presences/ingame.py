@@ -8,7 +8,10 @@ def presence(rpc,client=None,data=None,content_data=None,config=None):
 
         if coregame is not None:
             match_id = coregame["MatchID"]
-            if data["provisioningFlow"] != "ShootingRange":
+            match_data = data.get("matchPresenceData", {}) if data else {}
+            provisioning_flow = match_data.get("provisioningFlow") or data.get("provisioningFlow", "") if data else ""
+            
+            if provisioning_flow != "ShootingRange":
                 try:
                     session = Game_Session(rpc,client,data,match_id,content_data,config)
                     session.main_loop()

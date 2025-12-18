@@ -45,14 +45,21 @@ class Game_Session:
 
     def main_loop(self):
         presence = self.client.fetch_presence()
-        while presence is not None and presence["sessionLoopState"] == "INGAME":
+        match_data = presence.get("matchPresenceData", {}) if presence else {}
+        session_state = match_data.get("sessionLoopState") or presence.get("sessionLoopState", "") if presence else ""
+        
+        while presence is not None and session_state == "INGAME":
             presence = self.client.fetch_presence()
-            is_afk = presence["isIdle"]
+            match_data = presence.get("matchPresenceData", {}) if presence else {}
+            session_state = match_data.get("sessionLoopState") or presence.get("sessionLoopState", "") if presence else ""
+            
+            is_afk = presence.get("isIdle", False) if presence else False
             if is_afk:
                 away(self.rpc,self.client,presence,self.content_data,self.config)  
             else:
                 party_state,party_size = Utilities.build_party_state(presence)
-                my_score,other_score = presence["partyOwnerMatchScoreAllyTeam"],presence["partyOwnerMatchScoreEnemyTeam"]
+                my_score = presence.get("partyOwnerMatchScoreAllyTeam", 0) if presence else 0
+                other_score = presence.get("partyOwnerMatchScoreEnemyTeam", 0) if presence else 0
 
                 self.rpc.update(
                     state=party_state,
@@ -63,7 +70,7 @@ class Game_Session:
                     small_image=self.small_image,
                     small_text=self.small_text,
                     party_size=party_size,
-                    party_id=presence["partyId"],
+                    party_id=presence.get("partyId", "") if presence else "",
                     instance=True,
                 )
 

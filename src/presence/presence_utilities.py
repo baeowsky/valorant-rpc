@@ -7,13 +7,17 @@ class Utilities:
 
     @staticmethod 
     def build_party_state(data):
-        party_state = Localizer.get_localized_text("presences","party_states","solo")     
-        if data["partySize"] > 1:
+        party_state = Localizer.get_localized_text("presences","party_states","solo")
+        party_size_val = data.get("partySize", 1)
+        party_accessibility = data.get("partyAccessibility", "CLOSED")
+        max_party_size = data.get("maxPartySize", 5)
+        
+        if party_size_val > 1:
             party_state = Localizer.get_localized_text("presences","party_states","in_party")   
-        elif data["partyAccessibility"] == "OPEN":
+        elif party_accessibility == "OPEN":
             party_state = Localizer.get_localized_text("presences","party_states","open")
 
-        party_size = [data["partySize"],data["maxPartySize"]] if data["partySize"] > 1 or data["partyAccessibility"] == "OPEN" else None
+        party_size = [party_size_val, max_party_size] if party_size_val > 1 or party_accessibility == "OPEN" else None
         if party_size is not None:
             if party_size[0] == 0: 
                 party_size[0] = 1
@@ -65,9 +69,10 @@ class Utilities:
 
     @staticmethod
     def fetch_mode_data(data, content_data):
-        image = f"mode_{data['queueId'] if data['queueId'] in content_data['modes_with_icons'] else 'discovery'}"
-        mode_name = content_data['queue_aliases'][data['queueId']] if data["queueId"] in content_data["queue_aliases"].keys() else "Custom"
-        mode_name = Utilities.localize_content_name(mode_name, "presences", "modes", data["queueId"])
+        queue_id = data.get('queueId', '') if data else ''
+        image = f"mode_{queue_id if queue_id in content_data.get('modes_with_icons', []) else 'discovery'}"
+        mode_name = content_data.get('queue_aliases', {}).get(queue_id, "Custom") if queue_id in content_data.get("queue_aliases", {}).keys() else "Custom"
+        mode_name = Utilities.localize_content_name(mode_name, "presences", "modes", queue_id)
         return image,mode_name
 
     @staticmethod 
