@@ -48,6 +48,15 @@
 
 The program runs in the system tray and updates your Discord status automatically.
 
+## Changelog
+
+### 19/12/2025
+
+#### Fixed
+- Improved matchmaking queue status detection
+- Added `partyState` detection from `partyPresenceData` and `matchPresenceData`
+- Queue status now properly displays when searching for a match
+
 ## Recent Fixes
 
 This fork includes important fixes for the updated Valorant API structure:
@@ -80,3 +89,4 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 [stars-url]: https://github.com/colinhartigan/valorant-rpc/stargazers
 [license-shield]: https://img.shields.io/github/license/colinhartigan/valorant-rpc?style=for-the-badge
 [license-url]: https://github.com/colinhartigan/valorant-rpc/blob/v3/LICENSE.txt
+
