@@ -28,9 +28,11 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------    
-	"C:/Program Files/Python39/python.exe" -m pipreqs.pipreqs --force --no-pin
-    "C:/Program Files/Python37/python.exe" -m pip install -r requirements.txt
-    "C:/Program Files/Python37/python.exe" -m pip install -r requirements.txt --upgrade
-    "C:/Program Files/Python37/python.exe" -m PyInstaller main.py --name="valorant-rpc" --icon=favicon.ico --hidden-import "pystray._win32" --onefile --version-file "version.py"
+    echo Installing requirements...
+    python -m pip install -r requirements.txt --upgrade
+    
+    echo Building with PyInstaller...
+    pyinstaller valorant-rpc.spec --clean --noconfirm
+    
+    echo Build complete! Check the 'dist' folder.
     pause
-
