@@ -55,7 +55,7 @@ The program runs in the system tray and updates your Discord status automaticall
 - Fixed crash when entering the Shooting Range (`sessionLoopState` KeyError)
 - Implemented safe data access in `range.py` consistent with other game modes
 
-### v3.2.4 - 2024-12-19
+### v3.2.4 - 2025-12-19
 
 #### Fixed
 - Fixed `sessionLoopState` detection (moved to `matchPresenceData`)
@@ -87,4 +87,5 @@ Riot Games does not endorse or sponsor this project. Riot Games, and all associa
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+
 
