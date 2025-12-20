@@ -8,6 +8,10 @@
                                                    /_/         
 ```
 
+[![Discord][discord-shield]][discord-url]
+[![Stars][stars-shield]][stars-url]
+[![License][license-shield]][license-url]
+
 > **🔧 This is an actively maintained fork of the original [valorant-rpc](https://github.com/colinhartigan/valorant-rpc) project.**  
 > The original repository has been archived. This fork includes bug fixes and updates to keep the project working with the latest Valorant API changes.
 
@@ -50,22 +54,29 @@ The program runs in the system tray and updates your Discord status automaticall
 
 ## Changelog
 
-### 19/12/2025
+### v3.2.5 - 2025-12-20
 
 #### Fixed
+- Fixed crash when entering the Shooting Range (`sessionLoopState` KeyError)
+- Implemented safe data access in `range.py` consistent with other game modes
+
+### v3.2.4 - 2024-12-19
+
+#### Fixed
+- Fixed `sessionLoopState` detection (moved to `matchPresenceData`)
+- Fixed `accountLevel` retrieval (moved to `playerPresenceData`)
+- Fixed in-game status detection - now properly shows game mode and score
+- Fixed `provisioningFlow` detection for shooting range vs regular games
+- Added safe `.get()` key access to prevent crashes from missing data
+
+#### Added
 - Improved matchmaking queue status detection
 - Added `partyState` detection from `partyPresenceData` and `matchPresenceData`
 - Queue status now properly displays when searching for a match
 
-## Recent Fixes
-
-This fork includes important fixes for the updated Valorant API structure:
-
-- ✅ Fixed `sessionLoopState` detection (moved to `matchPresenceData`)
-- ✅ Fixed `accountLevel` retrieval (moved to `playerPresenceData`)
-- ✅ Fixed in-game status detection
-- ✅ Added safe key access to prevent crashes from missing data
-- ✅ Improved error handling throughout
+#### Changed
+- Updated all presence files to use safe key access patterns
+- Improved error handling throughout the codebase
 
 ## Credits
 
@@ -81,12 +92,3 @@ Riot Games does not endorse or sponsor this project. Riot Games, and all associa
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
-
-<!-- Links -->
-[discord-shield]: https://img.shields.io/discord/860288779558715402?color=7289da&label=Support&logo=discord&logoColor=7289da&style=for-the-badge
-[discord-url]: https://discord.gg/uGuswsZwAT
-[stars-shield]: https://img.shields.io/github/stars/colinhartigan/valorant-rpc?logo=github&style=for-the-badge
-[stars-url]: https://github.com/colinhartigan/valorant-rpc/stargazers
-[license-shield]: https://img.shields.io/github/license/colinhartigan/valorant-rpc?style=for-the-badge
-[license-url]: https://github.com/colinhartigan/valorant-rpc/blob/v3/LICENSE.txt
-
