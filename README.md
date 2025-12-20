@@ -41,8 +41,6 @@
    ```
 
 ## Usage
-
-- **If VALORANT is not running:** The program will launch it for you
 - **If VALORANT is already running:** Just start the program and the Discord presence will activate
 
 The program runs in the system tray and updates your Discord status automatically.
@@ -87,5 +85,6 @@ Riot Games does not endorse or sponsor this project. Riot Games, and all associa
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+
 
 
