@@ -15,6 +15,7 @@ Handles initialization, dependency checks, and starting the main loop.
 from src.startup import Startup 
 from src.utilities.config.app_config import default_config
 from src.localization.localization import Localizer
+from InquirerPy.utils import color_print
 
 kernel32 = ctypes.WinDLL('kernel32')
 user32 = ctypes.WinDLL('user32')
