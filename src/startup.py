@@ -123,26 +123,45 @@ class Startup:
             Startup.clear_line()
             color_print([("Cyan", "["),("White",f"{presence_timer}"),("Cyan", f"] {Localizer.get_localized_text('prints','startup','waiting_for_presence')}")])
             presence_timer += 1
+            # Check if we've exceeded the timeout for Discord presence detection
             if presence_timer >= presence_timeout:
-                self.systray.exit()
+                print()
+                color_print([("Red", f"Timed out waiting for Discord Presence after {presence_timeout} seconds.")])
+                if hasattr(self, 'systray'):
+                    self.systray.exit()
+                # Wait for user input so they can read the error message before the window closes
+                input("Press Enter to exit...")
                 os._exit(1)
             time.sleep(1)
         Startup.clear_line()
         Startup.clear_line()
 
     def start_game(self):
-        path = Riot_Client_Services.get_rcs_path()
         launch_timeout = Localizer.get_config_value("startup","game_launch_timeout")
         launch_timer = 0
+        
+        try:
+            Logger.debug("Attempting to launch Valorant via riotclient URI...")
+            # os.startfile is the equivalent of double-clicking or running "start ..." in cmd
+            # but handles the system association directly.
+            # Using the URI scheme is more robust than finding the executable path manually.
+            os.startfile("riotclient://launch-product?product=valorant&patchline=live")
+        except Exception as e:
+            color_print([("Red", f"Failed to launch Valorant: {e}")])
+            Logger.debug(f"Failed to launch Valorant: {e}")
 
-        psutil.subprocess.Popen([path, "--launch-product=valorant", "--launch-patchline=live"])
         print()
         while not Processes.are_processes_running():
             Startup.clear_line()
             color_print([("Cyan", "["),("White",f"{launch_timer}"),("Cyan", f"] {Localizer.get_localized_text('prints','startup','waiting_for_valorant')}")])
             launch_timer += 1
             if launch_timer >= launch_timeout:
-                self.systray.exit()
+                print()
+                color_print([("Red", f"Timed out waiting for Valorant to start after {launch_timeout} seconds.")])
+                color_print([("Yellow", "Please ensure Valorant is installed and can be launched manually.")])
+                if hasattr(self, 'systray'):
+                    self.systray.exit()
+                input("Press Enter to exit...")
                 os._exit(1)
             time.sleep(1)
         Startup.clear_line()
