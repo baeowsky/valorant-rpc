@@ -14,7 +14,7 @@ class Range_Session:
         self.match_id = match_id  
         self.puuid = self.client.puuid
 
-        data["MapID"] = "/Game/Maps/Poveglia/Range" # hotfix :)
+        data["MapID"] = "/Game/Maps/Poveglia/Range"
         self.start_time = time.time()
         self.map_name, self.mode_name = Utilities.fetch_map_data(data, content_data)
         self.map_image = "splash_range"
@@ -26,10 +26,16 @@ class Range_Session:
 
     def main_loop(self):
         presence = self.client.fetch_presence()
-        while presence is not None and presence["sessionLoopState"] == "INGAME":
+        match_data = presence.get("matchPresenceData", {}) if presence else {}
+        session_state = match_data.get("sessionLoopState") or presence.get("sessionLoopState", "") if presence else ""
+        
+        while presence is not None and session_state == "INGAME":
             try:
                 presence = self.client.fetch_presence()
-                is_afk = presence["isIdle"]
+                match_data = presence.get("matchPresenceData", {}) if presence else {}
+                session_state = match_data.get("sessionLoopState") or presence.get("sessionLoopState", "") if presence else ""
+                
+                is_afk = presence.get("isIdle", False) if presence else False
                 if is_afk:
                     away(self.rpc,self.client,presence,self.content_data,self.config)  
                 else:
@@ -44,9 +50,10 @@ class Range_Session:
                         small_image=self.small_image,
                         small_text=self.small_text,
                         party_size=party_size,
-                        party_id=presence["partyId"],
+                        party_id=presence.get("partyId", "") if presence else "",
                     )
 
                 time.sleep(Localizer.get_config_value("presence_refresh_interval"))
-            except:
+            except Exception as e:
+                # print(f"DEBUG RANGE ERROR: {e}")
                 return
