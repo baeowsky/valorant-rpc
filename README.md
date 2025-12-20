@@ -7,11 +7,6 @@
 |___/_/ |_/____/\____/_/|_/_/ |_/_/|_/ /_/     /_/ / .__/\__/ 
                                                    /_/         
 ```
-
-[![Discord][discord-shield]][discord-url]
-[![Stars][stars-shield]][stars-url]
-[![License][license-shield]][license-url]
-
 > **🔧 This is an actively maintained fork of the original [valorant-rpc](https://github.com/colinhartigan/valorant-rpc) project.**  
 > The original repository has been archived. This fork includes bug fixes and updates to keep the project working with the latest Valorant API changes.
 
@@ -92,3 +87,4 @@ Riot Games does not endorse or sponsor this project. Riot Games, and all associa
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+
