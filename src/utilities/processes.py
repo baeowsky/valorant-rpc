@@ -5,11 +5,16 @@ class Processes:
 
     @staticmethod
     def are_processes_running(required_processes=["VALORANT-Win64-Shipping.exe", "RiotClientServices.exe"]):
-        processes = []
-        for proc in psutil.process_iter():
-            processes.append(proc.name())
+        required = set(required_processes)
+        for proc in psutil.process_iter(['name']):
+            name = proc.info.get('name')
+            if name in required:
+                required.remove(name)
+
+            if not required:
+                return True
         
-        return set(required_processes).issubset(processes)
+        return False
 
     @staticmethod
     def is_program_already_running():
