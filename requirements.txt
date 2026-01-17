@@ -1,5 +1,4 @@
 urllib3
-iso8601
 Flask_Cors
 requests
 pypresence
