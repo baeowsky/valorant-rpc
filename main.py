@@ -9,8 +9,9 @@ Main entry point for Valorant RPC.
 Handles initialization, dependency checks, and starting the main loop.
 """
 
-# fix for "name 'sys' is not defined" ?
-# os.chdir(os.path.dirname(os.path.abspath(__file__)))
+# Set the current working directory to the script's location.
+# This ensures that relative paths (e.g., in Filepath.get_path) are resolved correctly when running from source.
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 from src.startup import Startup 
 from src.utilities.config.app_config import default_config
