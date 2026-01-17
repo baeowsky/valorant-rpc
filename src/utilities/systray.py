@@ -1,6 +1,6 @@
 from PIL import Image
 from pystray import Icon as icon, Menu as menu, MenuItem as item
-import ctypes, os, urllib.request, sys, time, pyperclip
+import ctypes, os, sys, time, pyperclip
 from InquirerPy.utils import color_print
 
 from .filepath import Filepath
@@ -23,8 +23,7 @@ class Systray:
 
     def run(self):
         global window_shown
-        Systray.generate_icon()
-        systray_image = Image.open(Filepath.get_path(os.path.join(Filepath.get_appdata_folder(), 'favicon.ico')))
+        systray_image = Image.open(Filepath.get_path(os.path.join('assets', 'game_icon_white.ico')))
         systray_menu = menu(
             item('show window', Systray.tray_window_toggle, checked=lambda item: window_shown),
             item('config', Systray.modify_config),
@@ -45,10 +44,6 @@ class Systray:
 
     def copy_join_link(self):
         pyperclip.copy(Utilities.get_join_state(self.client,self.config)[0]["url"])
-
-    @staticmethod
-    def generate_icon():
-        urllib.request.urlretrieve('https://raw.githubusercontent.com/colinhartigan/valorant-rpc/v2/favicon.ico',Filepath.get_path(os.path.join(Filepath.get_appdata_folder(),'favicon.ico')))
 
     @staticmethod 
     def modify_config():
