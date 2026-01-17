@@ -15,7 +15,7 @@ class Loader:
     @staticmethod 
     def load_all_content(client):
         content_data = {
-            "agents": [],
+            "agents": {},
             "maps": {},
             "modes": [],   
             "comp_tiers": {},
