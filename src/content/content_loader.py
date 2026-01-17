@@ -5,8 +5,11 @@ from ..localization.localization import Localizer
 class Loader:
 
     @staticmethod 
-    def fetch(endpoint="/"):
-        data = requests.get(f"https://valorant-api.com/v1{endpoint}?language=all")
+    def fetch(endpoint="/", session=None):
+        if session:
+            data = session.get(f"https://valorant-api.com/v1{endpoint}?language=all")
+        else:
+            data = requests.get(f"https://valorant-api.com/v1{endpoint}?language=all")
         return data.json()
 
     @staticmethod 
@@ -47,10 +50,12 @@ class Loader:
             "modes_with_icons": ["ggteam","onefa","snowball","spikerush","unrated","deathmatch","swiftplay","hurm"]
         }
         all_content = client.fetch_content()
-        agents = Loader.fetch("/agents")["data"]
-        maps = Loader.fetch("/maps")["data"]
-        modes = Loader.fetch("/gamemodes")["data"]
-        comp_tiers = Loader.fetch("/competitivetiers")["data"][-1]["tiers"]
+
+        with requests.Session() as session:
+            agents = Loader.fetch("/agents", session)["data"]
+            maps = Loader.fetch("/maps", session)["data"]
+            modes = Loader.fetch("/gamemodes", session)["data"]
+            comp_tiers = Loader.fetch("/competitivetiers", session)["data"][-1]["tiers"]
         
         for season in all_content["Seasons"]:
             if season["IsActive"] and season["Type"] == "act":
