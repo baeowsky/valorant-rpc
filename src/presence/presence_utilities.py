@@ -49,9 +49,10 @@ class Utilities:
         
     @staticmethod 
     def fetch_map_data(coregame_data,content_data):
-        for gmap in content_data["maps"]:
-            if gmap["path"] == coregame_data["MapID"]:
-                return gmap["display_name"], gmap["display_name_localized"]
+        map_id = coregame_data["MapID"]
+        gmap = content_data["maps"].get(map_id)
+        if gmap:
+            return gmap["display_name"], gmap["display_name_localized"]
         return "", ""
  
     @staticmethod 

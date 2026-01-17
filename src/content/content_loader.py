@@ -16,7 +16,7 @@ class Loader:
     def load_all_content(client):
         content_data = {
             "agents": [],
-            "maps": [],
+            "maps": {},
             "modes": [],   
             "comp_tiers": [],
             "season": {},
@@ -74,13 +74,13 @@ class Loader:
             })
 
         for game_map in maps:
-            content_data["maps"].append({
+            content_data["maps"][game_map["mapUrl"]] = {
                 "uuid": game_map["uuid"],
                 "display_name": game_map["displayName"]["en-US"],
                 "display_name_localized": game_map["displayName"][Localizer.locale],
                 "path": game_map["mapUrl"],
                 "internal_name": game_map["mapUrl"].split("/")[-1]
-            })
+            }
 
         for mode in modes:
             content_data["modes"].append({
