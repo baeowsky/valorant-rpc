@@ -5,12 +5,15 @@ class Processes:
 
     @staticmethod
     def are_processes_running(required_processes=["VALORANT-Win64-Shipping.exe", "RiotClientServices.exe"]):
-        required_processes = set(required_processes)
-        for proc in psutil.process_iter():
-            if proc.name() in required_processes:
-                required_processes.remove(proc.name())
-            if not required_processes:
+        required = set(required_processes)
+        for proc in psutil.process_iter(['name']):
+            name = proc.info.get('name')
+            if name in required:
+                required.remove(name)
+
+            if not required:
                 return True
+        
         return False
 
     @staticmethod
