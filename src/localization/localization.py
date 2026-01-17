@@ -30,11 +30,7 @@ class Localizer:
     @staticmethod
     def get_config_key(key):
         try:
-            for k,value in Locales[Localizer.locale]["config"].items():
-                #print(f"{k}/{value}")
-                if k == key:
-                    return value
-            return key
+            return Locales[Localizer.locale]["config"].get(key, key)
         except:
             return key
 
