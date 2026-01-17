@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from ...presence_utilities import Utilities
 from ..menu_presences.away import presence as away
@@ -33,6 +34,7 @@ class Game_Session:
         try:
             coregame_data = self.client.coregame_fetch_match(self.match_id)
         except PhaseError:
+            traceback.print_exc()
             raise Exception
         coregame_player_data = {}
         for player in coregame_data["Players"]:
