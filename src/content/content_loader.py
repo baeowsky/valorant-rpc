@@ -15,7 +15,7 @@ class Loader:
     @staticmethod 
     def load_all_content(client):
         content_data = {
-            "agents": [],
+            "agents": {},
             "maps": [],
             "modes": [],   
             "comp_tiers": [],
@@ -66,12 +66,12 @@ class Loader:
                 }
 
         for agent in agents:
-            content_data["agents"].append({
+            content_data["agents"][agent["uuid"]] = {
                 "uuid": agent["uuid"],
                 "display_name": agent["displayName"]["en-US"],
                 "display_name_localized": agent["displayName"][Localizer.locale],
                 "internal_name": agent["developerName"]
-            })
+            }
 
         for game_map in maps:
             content_data["maps"].append({
