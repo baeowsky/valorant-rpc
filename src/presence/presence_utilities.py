@@ -38,10 +38,7 @@ class Utilities:
             mmr = client.fetch_mmr()["QueueSkills"]["competitive"]["SeasonalInfoBySeasonID"][content_data["season"]["season_uuid"]]
         except:
             return "rank_0","Rank not found"
-        rank_data = {}
-        for tier in content_data["comp_tiers"]:
-            if tier["id"] == mmr["CompetitiveTier"]:
-                rank_data = tier
+        rank_data = content_data["comp_tiers"][mmr["CompetitiveTier"]]
         rank_image = f"rank_{rank_data['id']}"
         rank_text = f"{rank_data['display_name_localized']} - {mmr['RankedRating']}{Localizer.get_localized_text('presences','leveling','ranked_rating')}" + (f" // #{mmr['LeaderboardRank']}" if mmr['LeaderboardRank'] != 0 else "") 
 

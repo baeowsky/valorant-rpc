@@ -18,7 +18,7 @@ class Loader:
             "agents": [],
             "maps": {},
             "modes": [],   
-            "comp_tiers": [],
+            "comp_tiers": {},
             "season": {},
             "queue_aliases": { #i'm so sad these have to be hardcoded but oh well :(
                 "newmap": "New Map",
@@ -90,10 +90,10 @@ class Loader:
             })
 
         for tier in comp_tiers:
-            content_data["comp_tiers"].append({
+            content_data["comp_tiers"][tier["tier"]] = {
                 "display_name": tier["tierName"]["en-US"],
                 "display_name_localized": tier["tierName"][Localizer.locale],
                 "id": tier["tier"],
-            })
+            }
 
         return content_data
