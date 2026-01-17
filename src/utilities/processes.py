@@ -18,11 +18,8 @@ class Processes:
 
     @staticmethod
     def is_program_already_running():
-        processes = []
+        count = 0
         for proc in psutil.process_iter():
-            processes.append(proc.name())
-
-        if len([proc for proc in processes if proc == "valorant-rpc.exe"]) > 2:
-            return True
-
-        return False
+            if proc.name() == "valorant-rpc.exe":
+                count += 1
+        return count > 2
