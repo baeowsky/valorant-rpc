@@ -141,11 +141,16 @@ class Startup:
         launch_timer = 0
         
         try:
-            Logger.debug("Attempting to launch Valorant via riotclient URI...")
-            # os.startfile is the equivalent of double-clicking or running "start ..." in cmd
-            # but handles the system association directly.
-            # Using the URI scheme is more robust than finding the executable path manually.
-            os.startfile("riotclient://launch-product?product=valorant&patchline=live")
+            rcs_path = Riot_Client_Services.get_rcs_path()
+            if rcs_path:
+                Logger.debug(f"Launching Valorant via RiotClientServices executable at {rcs_path}...")
+                subprocess.Popen([rcs_path, "--launch-product=valorant", "--launch-patchline=live"])
+            else:
+                Logger.debug("Attempting to launch Valorant via riotclient URI...")
+                # os.startfile is the equivalent of double-clicking or running "start ..." in cmd
+                # but handles the system association directly.
+                # Using the URI scheme is more robust than finding the executable path manually.
+                os.startfile("riotclient://launch-product?product=valorant&patchline=live")
         except Exception as e:
             color_print([("Red", f"Failed to launch Valorant: {e}")])
             Logger.debug(f"Failed to launch Valorant: {e}")
