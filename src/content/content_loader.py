@@ -20,6 +20,7 @@ class Loader:
             "maps": {},
             "modes": [],   
             "comp_tiers": {},
+            "skins": {},
             "season": {},
             "queue_aliases": { #i'm so sad these have to be hardcoded but oh well :(
                 "newmap": "New Map",
@@ -135,5 +136,14 @@ class Loader:
                 "display_name_localized": loc_tier["tierName"],
                 "id": tier_id,
             }
+        
+        with requests.Session() as session:
+            skins = Loader.fetch("/weapons/skins", session)["data"]
+            for skin in skins:
+                content_data["skins"][skin["uuid"]] = {
+                    "uuid": skin["uuid"],
+                    "display_name": skin["displayName"].get("en-US", skin["displayName"]), # some skins might not have en-US?
+                    "display_name_localized": skin["displayName"].get(Localizer.locale, skin["displayName"]),
+                }
 
         return content_data

@@ -1,8 +1,8 @@
-from .menu_presences import (default,queue,custom_setup)
+from .menu_presences import (default,queue,custom_setup,loadout)
 
 def presence(rpc,client=None,data=None,content_data=None,config=None):
     state_types = {
-        "DEFAULT": default,
+        "DEFAULT": loadout, # Replaced default with loadout (which falls back to default if disabled)
         "MATCHMAKING": queue,
         "CUSTOM_GAME_SETUP": custom_setup,
     }

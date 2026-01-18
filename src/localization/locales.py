@@ -24,6 +24,8 @@ Locales = {
             "agent": "agent",
             "rank": "rank",
             "map": "map",
+            "show_equipped_skin": "show_equipped_skin",
+            "skin_weapon_preference": "skin_weapon_preference",
         },
         "prints": {
             "config_modification": {

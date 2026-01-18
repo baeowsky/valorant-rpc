@@ -32,6 +32,9 @@ class Startup:
             Program_Data.update_file_location()
 
             self.config = Config.fetch_config()
+            config_path = os.path.join(os.getenv('APPDATA'), 'valorant-rpc', 'config.json')
+            color_print([("Yellow", f"Config loaded from: {config_path}")])
+
             if "locale" in self.config.keys():
                 if self.config["locale"][0] == "":
                     config = Localizer.prompt_locale(self.config)

@@ -16,7 +16,8 @@ default_config = {
         "menu": {
             "show_rank_in_comp_lobby": True,
             #"show_join_button_with_open_party": True,
-            #"allow_join_requests": False,
+            "show_equipped_skin": True,
+            "skin_weapon_preference": "Vandal",
         },
         "modes": {
             "all": {

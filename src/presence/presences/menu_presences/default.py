@@ -30,5 +30,6 @@ def presence(rpc,client=None,data=None,content_data=None,config=None):
             small_text=small_text,
             party_size=party_size,
             party_id=data.get("partyId", ""),
+            join=Utilities.get_join_secret(data),
             buttons=buttons
         )
