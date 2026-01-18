@@ -25,11 +25,15 @@ class Systray:
         global window_shown
         systray_image = Image.open(Filepath.get_path(os.path.join('assets', 'game_icon_white.ico')))
         systray_menu = menu(
-            item('show window', Systray.tray_window_toggle, checked=lambda item: window_shown),
-            item('config', Systray.modify_config),
+            item(
+                lambda item: Localizer.get_localized_text("prints", "systray", "hide_window") if window_shown else Localizer.get_localized_text("prints", "systray", "show_window"),
+                Systray.tray_window_toggle,
+                checked=lambda item: window_shown
+            ),
+            item(Localizer.get_localized_text("prints", "systray", "config"), Systray.modify_config),
             #item('copy join link', self.copy_join_link),
-            item('reload', Systray.restart),
-            item('exit', self.exit)
+            item(Localizer.get_localized_text("prints", "systray", "reload"), Systray.restart),
+            item(Localizer.get_localized_text("prints", "systray", "exit"), self.exit)
         )
         self.systray = icon("valorant-rpc", systray_image, "valorant-rpc", systray_menu)
         self.systray.run()
