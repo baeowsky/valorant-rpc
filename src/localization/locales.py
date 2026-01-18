@@ -46,6 +46,11 @@ Locales = {
             },
             "systray": {
                 "hiding_window": "hiding window",
+                "show_window": "Show Window",
+                "hide_window": "Hide Window",
+                "config": "Config",
+                "reload": "Reload",
+                "exit": "Exit",
             },
             "errors": {
                 "error_message": "the program encountered an error: please create an issue with the traceback below if this problem persists",
@@ -358,6 +363,11 @@ Locales = {
             },
             "systray": {
                 "hiding_window": "Ocultando ventana",
+                "show_window": "Mostrar Ventana",
+                "hide_window": "Ocultar Ventana",
+                "config": "Configuración",
+                "reload": "Recargar",
+                "exit": "Salir",
             },
             "errors": {
                 "error_message": "El programa ha encontrado un error: Por favor crea un issue en GitHub con el traceback de abajo si el problema persiste",
@@ -565,6 +575,11 @@ Locales = {
             },
             "systray": {
                 "hiding_window": "dissimulation de la fenêtre",
+                "show_window": "Afficher la fenêtre",
+                "hide_window": "Masquer la fenêtre",
+                "config": "Configuration",
+                "reload": "Recharger",
+                "exit": "Quitter",
             },
             "errors": {
                 "error_message": "le programme a rencontré une erreur: veuillez créer une erreur avec le retour ci-dessous si ce problème persiste",

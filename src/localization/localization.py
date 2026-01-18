@@ -23,6 +23,7 @@ class Localizer:
                 localized = localized.get(key)
             if localized is not None:
                 return localized
+            return get_default(*keys)
         except:
             return get_default(*keys)
 
