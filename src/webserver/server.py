@@ -1,5 +1,6 @@
 from flask import Flask, request, cli, jsonify, Response
 from flask_cors import CORS
+from markupsafe import escape
 import urllib3, logging
 
 urllib3.disable_warnings()
@@ -29,7 +30,7 @@ def request_party(party_id,friend_id):
                 return "<script>window.onload = window.close();</script>"
         return data
     else:
-        return f"you're not in the right region! (their region: {region}, your region: {client.region})"
+        return f"you're not in the right region! (their region: {escape(region)}, your region: {client.region})"
 
 @app.route('/valorant/join/<party_id>')
 def join_party(party_id):
@@ -40,7 +41,7 @@ def join_party(party_id):
             return "<script>window.onload = window.close();</script>"
         return data
 
-    return f"you're not in the right region! (their region: {region}, your region: {client.region})"
+    return f"you're not in the right region! (their region: {escape(region)}, your region: {client.region})"
 
 
 def start():
