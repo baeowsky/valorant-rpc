@@ -46,7 +46,7 @@ class InstallerApp:
         title_lbl = tk.Label(self.root, text="VALORANT RPC", font=("Poppins", 20, "bold"), fg=ACCENT_COLOR, bg=BG_COLOR)
         title_lbl.pack(pady=(30, 5))
 
-        subtitle_lbl = tk.Label(self.root, text="Setup Installer", font=("Poppins", 10, "medium"), fg=TEXT_SECONDARY, bg=BG_COLOR)
+        subtitle_lbl = tk.Label(self.root, text="Setup Installer", font=("Poppins", 10), fg=TEXT_SECONDARY, bg=BG_COLOR)
         subtitle_lbl.pack(pady=(0, 20))
 
         info_frame = tk.Frame(self.root, bg=CARD_BG, highlightbackground=BORDER_COLOR, highlightthickness=1)

@@ -22,7 +22,7 @@
 *   🔄 **Autosave Engine**: Every configuration adjustment (ranks, small images, presence timeouts) is autosaved instantly to your local profile.
 *   🚀 **One-Click Restart**: Restart the background RPC connection loop instantly from the sidebar dashboard.
 *   📜 **Integrated Log Console**: Read live logs from `rpc.log` in real-time to monitor connection states. Fully optimized scroll mechanics that never jump or scroll your main dashboard.
-*   💜 **Support & Signature**: Quick access to join the **[Official Support Discord](https://discord.gg/RJjMucjhbj)** directly from the sidebar.
+*   💜 **Support**: Quick access to join the **[Official Support Discord](https://discord.gg/RJjMucjhbj)** directly from the sidebar.
 
 ---
 
