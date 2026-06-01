@@ -6,30 +6,36 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter import ttk
 
-WIN_BG = "#f0f0f0"
-WIN_WHITE = "#ffffff"
-WIN_BORDER = "#d0d0d0"
+BG_COLOR = "#ffffff"
+CARD_BG = "#f3f3f3"
+BORDER_COLOR = "#e5e5e5"
 TEXT_COLOR = "#000000"
-TEXT_SECONDARY = "#505050"
-ACCENT_BLUE = "#0a5bc6"
-SIDEBAR_BLUE = "#4a3c9e"
+TEXT_SECONDARY = "#5f5f5f"
+ACCENT_BLUE = "#0067b8"
+ACCENT_HOVER = "#005293"
+PROGRESS_BG = "#e0e0e0"
 
-class WindowsInstallerApp:
+class Windows11InstallerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Setup - VALORANT RPC")
-        self.root.geometry("500x360")
-        self.root.configure(bg=WIN_BG)
+        self.root.title("VALORANT RPC - App Installer")
+        self.root.geometry("520x400")
+        self.root.configure(bg=BG_COLOR)
         self.root.resizable(False, False)
 
         self.style = ttk.Style()
         try:
             self.style.theme_use('vista')
         except Exception:
-            try:
-                self.style.theme_use('winnative')
-            except Exception:
-                pass
+            pass
+
+        self.style.configure("Fluent.Horizontal.TProgressbar", 
+                             thickness=6, 
+                             troughcolor=PROGRESS_BG, 
+                             background=ACCENT_BLUE, 
+                             bordercolor=BG_COLOR, 
+                             lightcolor=ACCENT_BLUE, 
+                             darkcolor=ACCENT_BLUE)
 
         self.default_install_dir = os.path.join(os.environ["LOCALAPPDATA"], "Valorant-RPC")
         self.install_dir = tk.StringVar(value=self.default_install_dir)
@@ -38,106 +44,111 @@ class WindowsInstallerApp:
         self.create_start_shortcut = tk.BooleanVar(value=True)
         self.launch_after = tk.BooleanVar(value=True)
         
-        self.current_step = 1 # 1: Welcome, 2: Directory, 3: Ready, 4: Installing, 5: Finished
+        self.current_step = 1 # 1: Welcome, 2: Directory Setup, 3: Installing, 4: Finished
 
         self.render_layout()
 
-    def render_layout(self):
+    def clear_screen(self):
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        self.bottom_frame = tk.Frame(self.root, bg=WIN_BG, height=48)
-        self.bottom_frame.pack(side="bottom", fill="x")
+    def render_layout(self):
+        self.clear_screen()
 
-        sep = tk.Frame(self.root, bg=WIN_BORDER, height=1)
-        sep.pack(side="bottom", fill="x")
-
-        self.main_area = tk.Frame(self.root, bg=WIN_BG)
-        self.main_area.pack(side="top", fill="both", expand=True)
+        self.container = tk.Frame(self.root, bg=BG_COLOR)
+        self.container.pack(fill="both", expand=True, padx=40, pady=30)
 
         if self.current_step == 1:
             self.show_welcome_screen()
         elif self.current_step == 2:
             self.show_directory_screen()
         elif self.current_step == 3:
-            self.show_ready_screen()
-        elif self.current_step == 4:
             self.show_installing_screen()
-        elif self.current_step == 5:
+        elif self.current_step == 4:
             self.show_finished_screen()
 
-    def add_bottom_buttons(self, back_enabled=True, next_enabled=True, next_text="Next >", cancel_enabled=True, next_cmd=None):
-        cancel_btn = tk.Button(self.bottom_frame, text="Cancel", font=("Tahoma", 8), command=self.root.quit, state="normal" if cancel_enabled else "disabled", width=10)
-        cancel_btn.pack(side="right", padx=(10, 15), pady=12)
-
-        next_cmd = next_cmd if next_cmd else self.go_next
-        next_btn = tk.Button(self.bottom_frame, text=next_text, font=("Tahoma", 8), command=next_cmd, state="normal" if next_enabled else "disabled", width=10)
-        next_btn.pack(side="right", padx=2, pady=12)
-
-        back_btn = tk.Button(self.bottom_frame, text="< Back", font=("Tahoma", 8), command=self.go_back, state="normal" if back_enabled else "disabled", width=10)
-        back_btn.pack(side="right", padx=2, pady=12)
-
-    def go_next(self):
-        self.current_step += 1
-        self.render_layout()
-
-    def go_back(self):
-        self.current_step -= 1
-        self.render_layout()
-
     def show_welcome_screen(self):
-        sidebar = tk.Frame(self.main_area, bg=SIDEBAR_BLUE, width=160)
-        sidebar.pack(side="left", fill="y")
-        
-        logo_lbl = tk.Label(sidebar, text="VALORANT\nRPC", font=("Tahoma", 16, "bold"), fg=WIN_WHITE, bg=SIDEBAR_BLUE)
-        logo_lbl.pack(pady=40)
+        header_frame = tk.Frame(self.container, bg=BG_COLOR)
+        header_frame.pack(fill="x", pady=(0, 20))
 
-        content = tk.Frame(self.main_area, bg=WIN_WHITE)
-        content.pack(side="right", fill="both", expand=True)
+        logo_canvas = tk.Canvas(header_frame, width=48, height=48, bg=BG_COLOR, highlightthickness=0)
+        logo_canvas.pack(side="left", padx=(0, 15))
+        logo_canvas.create_oval(2, 2, 46, 46, fill=ACCENT_BLUE, outline="")
+        logo_canvas.create_polygon(16, 14, 34, 14, 25, 34, fill=BG_COLOR)
 
-        title = tk.Label(content, text="Welcome to the Valorant RPC\nSetup Wizard", font=("Tahoma", 12, "bold"), justify="left", fg=TEXT_COLOR, bg=WIN_WHITE)
-        title.pack(anchor="w", padx=20, pady=(30, 15))
+        title_frame = tk.Frame(header_frame, bg=BG_COLOR)
+        title_frame.pack(side="left", fill="both", expand=True, padx=12)
 
-        desc = tk.Label(content, text="This will install Valorant Discord Rich Presence on your computer.\n\nIt is recommended that you close all other applications before continuing.\n\nClick Next to continue, or Cancel to exit Setup.", font=("Tahoma", 8), justify="left", fg=TEXT_SECONDARY, bg=WIN_WHITE, wraplength=280)
-        desc.pack(anchor="w", padx=20, pady=10)
+        app_title = tk.Label(title_frame, text="VALORANT RPC", font=("Segoe UI", 16, "bold"), fg=TEXT_COLOR, bg=BG_COLOR)
+        app_title.pack(anchor="w")
 
-        self.add_bottom_buttons(back_enabled=False)
+        publisher_lbl = tk.Label(title_frame, text="Version 3.2.3  •  Published by baeowsky", font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR)
+        publisher_lbl.pack(anchor="w")
+
+        card = tk.Frame(self.container, bg=CARD_BG, highlightbackground=BORDER_COLOR, highlightthickness=1)
+        card.pack(fill="both", expand=True, pady=(0, 20))
+
+        card_title = tk.Label(card, text="Capabilities & Features:", font=("Segoe UI", 9, "bold"), fg=TEXT_COLOR, bg=CARD_BG)
+        card_title.pack(anchor="w", padx=20, pady=(15, 8))
+
+        features = [
+            "🎮 Displays live map, agent, match score and lobby status on Discord.",
+            "🔌 Includes global RPC Active toggle to instantly clear your status.",
+            "🚀 Integrates with system startup and background tray menu.",
+            "🛡️ Safe, light-weight, zero-token local presence connection."
+        ]
+
+        for ft in features:
+            f_lbl = tk.Label(card, text=ft, font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=CARD_BG, justify="left", wraplength=400)
+            f_lbl.pack(anchor="w", padx=20, pady=2)
+
+        # Footer Buttons
+        footer = tk.Frame(self.container, bg=BG_COLOR)
+        footer.pack(fill="x", side="bottom")
+
+        cancel_btn = tk.Button(footer, text="Cancel", font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR, activebackground=CARD_BG, relief="flat", bd=0, highlightbackground=BORDER_COLOR, highlightthickness=1, cursor="hand2", command=self.root.quit, width=12)
+        cancel_btn.pack(side="left", ipady=4)
+
+        install_btn = tk.Button(footer, text="Install", font=("Segoe UI", 9, "bold"), fg=BG_COLOR, bg=ACCENT_BLUE, activebackground=ACCENT_HOVER, relief="flat", bd=0, cursor="hand2", command=self.go_to_directory, width=12)
+        install_btn.pack(side="right", ipady=4)
+
+    def go_to_directory(self):
+        self.current_step = 2
+        self.render_layout()
 
     def show_directory_screen(self):
-        header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
-        header.pack(side="top", fill="x")
+        header_lbl = tk.Label(self.container, text="Choose installation settings", font=("Segoe UI", 14, "bold"), fg=TEXT_COLOR, bg=BG_COLOR)
+        header_lbl.pack(anchor="w", pady=(0, 20))
 
-        header_title = tk.Label(header, text="Select Destination Location", font=("Tahoma", 8, "bold"), fg=TEXT_COLOR, bg=WIN_WHITE)
-        header_title.pack(anchor="w", padx=15, pady=(8, 2))
+        lbl_dir = tk.Label(self.container, text="Install Location:", font=("Segoe UI", 9, "bold"), fg=TEXT_COLOR, bg=BG_COLOR)
+        lbl_dir.pack(anchor="w")
 
-        header_sub = tk.Label(header, text="Where should Valorant RPC be installed?", font=("Tahoma", 8), fg=TEXT_SECONDARY, bg=WIN_WHITE)
-        header_sub.pack(anchor="w", padx=25)
+        picker_frame = tk.Frame(self.container, bg=BG_COLOR)
+        picker_frame.pack(fill="x", pady=(5, 20))
 
-        body = tk.Frame(self.main_area, bg=WIN_BG)
-        body.pack(fill="both", expand=True, padx=25, pady=15)
+        path_entry = tk.Entry(picker_frame, textvariable=self.install_dir, font=("Segoe UI", 9), fg=TEXT_COLOR, bg=BG_COLOR, insertbackground=TEXT_COLOR, highlightbackground=BORDER_COLOR, highlightthickness=1, bd=0)
+        path_entry.pack(side="left", fill="x", expand=True, ipady=4, padx=(0, 10))
 
-        lbl = tk.Label(body, text="Setup will install Valorant RPC into the following folder.\nTo continue, click Next. If you would like to select a different folder, click Browse.", font=("Tahoma", 8), justify="left", fg=TEXT_COLOR, bg=WIN_BG, wraplength=450)
-        lbl.pack(anchor="w", pady=(0, 15))
+        browse_btn = tk.Button(picker_frame, text="Browse...", font=("Segoe UI", 8), bg=CARD_BG, relief="flat", bd=0, highlightbackground=BORDER_COLOR, highlightthickness=1, cursor="hand2", command=self.browse_folder, width=10)
+        browse_btn.pack(side="right", ipady=2)
 
-        picker_frame = tk.Frame(body, bg=WIN_BG)
-        picker_frame.pack(fill="x", pady=5)
+        opts_frame = tk.Frame(self.container, bg=BG_COLOR)
+        opts_frame.pack(fill="x", pady=5)
 
-        path_entry = tk.Entry(picker_frame, textvariable=self.install_dir, font=("Tahoma", 8), bg=WIN_WHITE, highlightbackground=WIN_BORDER, highlightthickness=1, bd=0)
-        path_entry.pack(side="left", fill="x", expand=True, ipady=3, padx=(0, 10))
+        cb1 = tk.Checkbutton(opts_frame, text="Create Desktop Shortcut", variable=self.create_desktop_shortcut, font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR, activebackground=BG_COLOR, selectcolor=BG_COLOR, bd=0)
+        cb1.pack(anchor="w", pady=4)
 
-        browse_btn = tk.Button(picker_frame, text="Browse...", font=("Tahoma", 8), command=self.browse_folder, width=10)
-        browse_btn.pack(side="right")
+        cb2 = tk.Checkbutton(opts_frame, text="Create Start Menu Shortcut", variable=self.create_start_shortcut, font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR, activebackground=BG_COLOR, selectcolor=BG_COLOR, bd=0)
+        cb2.pack(anchor="w", pady=4)
 
-        cb_frame = tk.Frame(body, bg=WIN_BG)
-        cb_frame.pack(fill="x", pady=(15, 0))
+        footer = tk.Frame(self.container, bg=BG_COLOR)
+        footer.pack(fill="x", side="bottom")
 
-        cb1 = tk.Checkbutton(cb_frame, text="Create a desktop shortcut", variable=self.create_desktop_shortcut, font=("Tahoma", 8), bg=WIN_BG, activebackground=WIN_BG)
-        cb1.pack(anchor="w", pady=2)
+        back_btn = tk.Button(footer, text="Back", font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR, activebackground=CARD_BG, relief="flat", bd=0, highlightbackground=BORDER_COLOR, highlightthickness=1, cursor="hand2", command=self.go_back, width=12)
+        back_btn.pack(side="left", ipady=4)
 
-        cb2 = tk.Checkbutton(cb_frame, text="Create a Start Menu shortcut", variable=self.create_start_shortcut, font=("Tahoma", 8), bg=WIN_BG, activebackground=WIN_BG)
-        cb2.pack(anchor="w", pady=2)
-
-        self.add_bottom_buttons()
+        install_btn = tk.Button(footer, text="Install Now", font=("Segoe UI", 9, "bold"), fg=BG_COLOR, bg=ACCENT_BLUE, activebackground=ACCENT_HOVER, relief="flat", bd=0, cursor="hand2", command=self.start_installation, width=12)
+        install_btn.pack(side="right", ipady=4)
 
     def browse_folder(self):
         selected = filedialog.askdirectory(initialdir=self.install_dir.get(), title="Select Install Folder")
@@ -147,65 +158,24 @@ class WindowsInstallerApp:
                 normalized = os.path.join(normalized, "Valorant-RPC")
             self.install_dir.set(normalized)
 
-    def show_ready_screen(self):
-        header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
-        header.pack(side="top", fill="x")
-
-        header_title = tk.Label(header, text="Ready to Install", font=("Tahoma", 8, "bold"), fg=TEXT_COLOR, bg=WIN_WHITE)
-        header_title.pack(anchor="w", padx=15, pady=(8, 2))
-
-        header_sub = tk.Label(header, text="Setup is now ready to begin installing Valorant RPC on your computer.", font=("Tahoma", 8), fg=TEXT_SECONDARY, bg=WIN_WHITE)
-        header_sub.pack(anchor="w", padx=25)
-
-        body = tk.Frame(self.main_area, bg=WIN_BG)
-        body.pack(fill="both", expand=True, padx=25, pady=15)
-
-        lbl = tk.Label(body, text="Click Install to continue with the installation, or click Back if you want to review or change any settings.", font=("Tahoma", 8), justify="left", fg=TEXT_COLOR, bg=WIN_BG, wraplength=450)
-        lbl.pack(anchor="w", pady=(0, 10))
-
-        recap_box = tk.Text(body, font=("Tahoma", 8), bg=WIN_WHITE, highlightbackground=WIN_BORDER, highlightthickness=1, bd=0, height=8)
-        recap_box.pack(fill="both", expand=True)
-
-        recap_text = (
-            "Destination location:\n"
-            f"      {self.install_dir.get()}\n\n"
-            "Shortcut items:\n"
-        )
-        if self.create_desktop_shortcut.get():
-            recap_text += "      - Create a desktop shortcut\n"
-        if self.create_start_shortcut.get():
-            recap_text += "      - Create a Start Menu shortcut\n"
-
-        recap_box.insert("1.0", recap_text)
-        recap_box.config(state="disabled")
-
-        self.add_bottom_buttons(next_text="Install", next_cmd=self.start_installation)
+    def go_back(self):
+        self.current_step = 1
+        self.render_layout()
 
     def show_installing_screen(self):
-        header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
-        header.pack(side="top", fill="x")
+        title_lbl = tk.Label(self.container, text="Installing Valorant RPC", font=("Segoe UI", 14, "bold"), fg=TEXT_COLOR, bg=BG_COLOR)
+        title_lbl.pack(anchor="w", pady=(20, 5))
 
-        header_title = tk.Label(header, text="Installing", font=("Tahoma", 8, "bold"), fg=TEXT_COLOR, bg=WIN_WHITE)
-        header_title.pack(anchor="w", padx=15, pady=(8, 2))
+        self.log_lbl = tk.Label(self.container, text="Preparing installation folder...", font=("Segoe UI", 9), fg=TEXT_SECONDARY, bg=BG_COLOR)
+        self.log_lbl.pack(anchor="w", pady=(0, 20))
 
-        header_sub = tk.Label(header, text="Please wait while Setup installs Valorant RPC on your computer.", font=("Tahoma", 8), fg=TEXT_SECONDARY, bg=WIN_WHITE)
-        header_sub.pack(anchor="w", padx=25)
-
-        body = tk.Frame(self.main_area, bg=WIN_BG)
-        body.pack(fill="both", expand=True, padx=25, pady=25)
-
-        self.log_lbl = tk.Label(body, text="Extracting files...", font=("Tahoma", 8), fg=TEXT_COLOR, bg=WIN_BG)
-        self.log_lbl.pack(anchor="w", pady=(0, 5))
-
-        self.progress = ttk.Progressbar(body, orient="horizontal", mode="determinate")
-        self.progress.pack(fill="x", pady=5)
+        self.progress = ttk.Progressbar(self.container, orient="horizontal", style="Fluent.Horizontal.TProgressbar", mode="determinate")
+        self.progress.pack(fill="x", pady=10)
         self.progress["maximum"] = 100
         self.progress["value"] = 5
 
-        self.add_bottom_buttons(back_enabled=False, next_enabled=False, cancel_enabled=False)
-
     def start_installation(self):
-        self.current_step = 4
+        self.current_step = 3
         self.render_layout()
         self.root.after(200, self.perform_installation)
 
@@ -230,13 +200,13 @@ class WindowsInstallerApp:
                 src_exe = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "valorant-rpc.exe")
 
             if not os.path.exists(src_exe):
-                raise FileNotFoundError(f"Source file not found at: {src_exe}")
+                raise FileNotFoundError(f"Source executable not found at: {src_exe}")
 
             dest_exe = os.path.join(dest_dir, "valorant-rpc.exe")
 
             shutil.copy2(src_exe, dest_exe)
             self.progress["value"] = 60
-            self.log_lbl.config(text="Creating program shortcuts...")
+            self.log_lbl.config(text="Creating desktop shortcuts...")
             self.root.update()
 
             if self.create_desktop_shortcut.get():
@@ -262,7 +232,7 @@ class WindowsInstallerApp:
             self.root.after(500, self.go_to_finished)
 
         except Exception as e:
-            messagebox.showerror("Setup Error", f"An error occurred during installation:\n{e}")
+            messagebox.showerror("Installation Error", f"An error occurred during installation:\n{e}")
             self.current_step = 2
             self.render_layout()
 
@@ -306,29 +276,24 @@ rd /s /q "{install_dir}"
             pass
 
     def go_to_finished(self):
-        self.current_step = 5
+        self.current_step = 4
         self.render_layout()
 
     def show_finished_screen(self):
-        sidebar = tk.Frame(self.main_area, bg=SIDEBAR_BLUE, width=160)
-        sidebar.pack(side="left", fill="y")
+        title_lbl = tk.Label(self.container, text="Installation Completed!", font=("Segoe UI", 16, "bold"), fg=TEXT_COLOR, bg=BG_COLOR)
+        title_lbl.pack(anchor="w", pady=(30, 5))
 
-        logo_lbl = tk.Label(sidebar, text="VALORANT\nRPC", font=("Tahoma", 16, "bold"), fg=WIN_WHITE, bg=SIDEBAR_BLUE)
-        logo_lbl.pack(pady=40)
+        desc_lbl = tk.Label(self.container, text="Valorant RPC has been successfully installed on your system.", font=("Segoe UI", 10), fg=TEXT_SECONDARY, bg=BG_COLOR)
+        desc_lbl.pack(anchor="w", pady=(0, 30))
 
-        content = tk.Frame(self.main_area, bg=WIN_WHITE)
-        content.pack(side="right", fill="both", expand=True)
+        cb_launch = tk.Checkbutton(self.container, text="Launch VALORANT RPC Now", variable=self.launch_after, font=("Segoe UI", 10, "bold"), fg=TEXT_COLOR, bg=BG_COLOR, selectcolor=BG_COLOR, bd=0, activebackground=BG_COLOR)
+        cb_launch.pack(anchor="w", pady=10)
 
-        title = tk.Label(content, text="Completing the Valorant RPC\nSetup Wizard", font=("Tahoma", 12, "bold"), justify="left", fg=TEXT_COLOR, bg=WIN_WHITE)
-        title.pack(anchor="w", padx=20, pady=(30, 15))
+        footer = tk.Frame(self.container, bg=BG_COLOR)
+        footer.pack(fill="x", side="bottom")
 
-        desc = tk.Label(content, text="Setup has finished installing Valorant RPC on your computer. The application may be launched by selecting the installed shortcuts.\n\nClick Finish to exit Setup.", font=("Tahoma", 8), justify="left", fg=TEXT_SECONDARY, bg=WIN_WHITE, wraplength=280)
-        desc.pack(anchor="w", padx=20, pady=5)
-
-        cb_launch = tk.Checkbutton(content, text="Launch VALORANT RPC Now", variable=self.launch_after, font=("Tahoma", 8, "bold"), fg=TEXT_COLOR, bg=WIN_WHITE, selectcolor=WIN_WHITE, bd=0, activebackground=WIN_WHITE)
-        cb_launch.pack(anchor="w", padx=20, pady=15)
-
-        self.add_bottom_buttons(back_enabled=False, next_text="Finish", next_cmd=self.finish_installer, cancel_enabled=False)
+        finish_btn = tk.Button(footer, text="Finish", font=("Segoe UI", 9, "bold"), fg=BG_COLOR, bg=ACCENT_BLUE, activebackground=ACCENT_HOVER, relief="flat", bd=0, cursor="hand2", command=self.finish_installer, width=12)
+        finish_btn.pack(side="right", ipady=4)
 
     def finish_installer(self):
         if self.launch_after.get():
@@ -347,5 +312,5 @@ if __name__ == "__main__":
         pass
 
     root = tk.Tk()
-    app = WindowsInstallerApp(root)
+    app = Windows11InstallerApp(root)
     root.mainloop()
