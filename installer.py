@@ -6,7 +6,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter import ttk
 
-# Standard Windows Setup colors
 WIN_BG = "#f0f0f0"
 WIN_WHITE = "#ffffff"
 WIN_BORDER = "#d0d0d0"
@@ -23,9 +22,7 @@ class WindowsInstallerApp:
         self.root.configure(bg=WIN_BG)
         self.root.resizable(False, False)
 
-        # Style configurations
         self.style = ttk.Style()
-        # Use native OS theme for native Windows buttons and controls
         try:
             self.style.theme_use('vista')
         except Exception:
@@ -34,11 +31,9 @@ class WindowsInstallerApp:
             except Exception:
                 pass
 
-        # Determine target path
         self.default_install_dir = os.path.join(os.environ["LOCALAPPDATA"], "Valorant-RPC")
         self.install_dir = tk.StringVar(value=self.default_install_dir)
 
-        # State vars
         self.create_desktop_shortcut = tk.BooleanVar(value=True)
         self.create_start_shortcut = tk.BooleanVar(value=True)
         self.launch_after = tk.BooleanVar(value=True)
@@ -48,19 +43,15 @@ class WindowsInstallerApp:
         self.render_layout()
 
     def render_layout(self):
-        # Clear previous widgets
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Bottom navigation button bar (Common to all screens)
         self.bottom_frame = tk.Frame(self.root, bg=WIN_BG, height=48)
         self.bottom_frame.pack(side="bottom", fill="x")
 
-        # Separator line above buttons
         sep = tk.Frame(self.root, bg=WIN_BORDER, height=1)
         sep.pack(side="bottom", fill="x")
 
-        # Main Workspace Area (takes remaining space)
         self.main_area = tk.Frame(self.root, bg=WIN_BG)
         self.main_area.pack(side="top", fill="both", expand=True)
 
@@ -76,16 +67,13 @@ class WindowsInstallerApp:
             self.show_finished_screen()
 
     def add_bottom_buttons(self, back_enabled=True, next_enabled=True, next_text="Next >", cancel_enabled=True, next_cmd=None):
-        # Cancel button (Right-aligned)
         cancel_btn = tk.Button(self.bottom_frame, text="Cancel", font=("Tahoma", 8), command=self.root.quit, state="normal" if cancel_enabled else "disabled", width=10)
         cancel_btn.pack(side="right", padx=(10, 15), pady=12)
 
-        # Next button
         next_cmd = next_cmd if next_cmd else self.go_next
         next_btn = tk.Button(self.bottom_frame, text=next_text, font=("Tahoma", 8), command=next_cmd, state="normal" if next_enabled else "disabled", width=10)
         next_btn.pack(side="right", padx=2, pady=12)
 
-        # Back button
         back_btn = tk.Button(self.bottom_frame, text="< Back", font=("Tahoma", 8), command=self.go_back, state="normal" if back_enabled else "disabled", width=10)
         back_btn.pack(side="right", padx=2, pady=12)
 
@@ -97,17 +85,13 @@ class WindowsInstallerApp:
         self.current_step -= 1
         self.render_layout()
 
-    # --- SCREEN 1: WELCOME ---
     def show_welcome_screen(self):
-        # Left blue branding sidebar panel
         sidebar = tk.Frame(self.main_area, bg=SIDEBAR_BLUE, width=160)
         sidebar.pack(side="left", fill="y")
         
-        # Subtle gradient simulation on sidebar
         logo_lbl = tk.Label(sidebar, text="VALORANT\nRPC", font=("Tahoma", 16, "bold"), fg=WIN_WHITE, bg=SIDEBAR_BLUE)
         logo_lbl.pack(pady=40)
 
-        # Right content panel
         content = tk.Frame(self.main_area, bg=WIN_WHITE)
         content.pack(side="right", fill="both", expand=True)
 
@@ -119,9 +103,7 @@ class WindowsInstallerApp:
 
         self.add_bottom_buttons(back_enabled=False)
 
-    # --- SCREEN 2: SELECT DIRECTORY ---
     def show_directory_screen(self):
-        # Header banner (Standard setup look)
         header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
         header.pack(side="top", fill="x")
 
@@ -131,24 +113,21 @@ class WindowsInstallerApp:
         header_sub = tk.Label(header, text="Where should Valorant RPC be installed?", font=("Tahoma", 8), fg=TEXT_SECONDARY, bg=WIN_WHITE)
         header_sub.pack(anchor="w", padx=25)
 
-        # Inner body
         body = tk.Frame(self.main_area, bg=WIN_BG)
         body.pack(fill="both", expand=True, padx=25, pady=15)
 
         lbl = tk.Label(body, text="Setup will install Valorant RPC into the following folder.\nTo continue, click Next. If you would like to select a different folder, click Browse.", font=("Tahoma", 8), justify="left", fg=TEXT_COLOR, bg=WIN_BG, wraplength=450)
         lbl.pack(anchor="w", pady=(0, 15))
 
-        # Folder path picker frame
         picker_frame = tk.Frame(body, bg=WIN_BG)
         picker_frame.pack(fill="x", pady=5)
 
         path_entry = tk.Entry(picker_frame, textvariable=self.install_dir, font=("Tahoma", 8), bg=WIN_WHITE, highlightbackground=WIN_BORDER, highlightthickness=1, bd=0)
         path_entry.pack(side="left", fill="x", expand=True, ipady=3, padx=(0, 10))
 
-        browse_btn = tk.Button(picker_frame, text="Browse...", font=("Tahoma", 8), command=self.browse_folder)
-        browse_btn.pack(side="right", width=12)
+        browse_btn = tk.Button(picker_frame, text="Browse...", font=("Tahoma", 8), command=self.browse_folder, width=10)
+        browse_btn.pack(side="right")
 
-        # Checklist
         cb_frame = tk.Frame(body, bg=WIN_BG)
         cb_frame.pack(fill="x", pady=(15, 0))
 
@@ -168,7 +147,6 @@ class WindowsInstallerApp:
                 normalized = os.path.join(normalized, "Valorant-RPC")
             self.install_dir.set(normalized)
 
-    # --- SCREEN 3: READY TO INSTALL ---
     def show_ready_screen(self):
         header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
         header.pack(side="top", fill="x")
@@ -185,7 +163,6 @@ class WindowsInstallerApp:
         lbl = tk.Label(body, text="Click Install to continue with the installation, or click Back if you want to review or change any settings.", font=("Tahoma", 8), justify="left", fg=TEXT_COLOR, bg=WIN_BG, wraplength=450)
         lbl.pack(anchor="w", pady=(0, 10))
 
-        # Configuration recap box
         recap_box = tk.Text(body, font=("Tahoma", 8), bg=WIN_WHITE, highlightbackground=WIN_BORDER, highlightthickness=1, bd=0, height=8)
         recap_box.pack(fill="both", expand=True)
 
@@ -204,7 +181,6 @@ class WindowsInstallerApp:
 
         self.add_bottom_buttons(next_text="Install", next_cmd=self.start_installation)
 
-    # --- SCREEN 4: INSTALLING ---
     def show_installing_screen(self):
         header = tk.Frame(self.main_area, bg=WIN_WHITE, height=58, highlightbackground=WIN_BORDER, highlightthickness=1)
         header.pack(side="top", fill="x")
@@ -237,14 +213,12 @@ class WindowsInstallerApp:
         dest_dir = self.install_dir.get()
 
         try:
-            # 1. Create dir
             if not os.path.exists(dest_dir):
                 os.makedirs(dest_dir)
             self.progress["value"] = 25
             self.log_lbl.config(text="Extracting program assets...")
             self.root.update()
 
-            # Find bundled valorant-rpc.exe
             if getattr(sys, 'frozen', False):
                 bundle_dir = sys._MEIPASS
             else:
@@ -252,7 +226,6 @@ class WindowsInstallerApp:
 
             src_exe = os.path.join(bundle_dir, "valorant-rpc.exe")
             
-            # Fallback for local testing
             if not os.path.exists(src_exe):
                 src_exe = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "valorant-rpc.exe")
 
@@ -261,13 +234,11 @@ class WindowsInstallerApp:
 
             dest_exe = os.path.join(dest_dir, "valorant-rpc.exe")
 
-            # 2. Copy binary
             shutil.copy2(src_exe, dest_exe)
             self.progress["value"] = 60
             self.log_lbl.config(text="Creating program shortcuts...")
             self.root.update()
 
-            # 3. Create Shortcuts via PowerShell
             if self.create_desktop_shortcut.get():
                 desktop_dir = os.path.join(os.environ["USERPROFILE"], "Desktop")
                 shortcut_path = os.path.join(desktop_dir, "Valorant RPC.lnk")
@@ -282,7 +253,6 @@ class WindowsInstallerApp:
             self.log_lbl.config(text="Registering uninstaller information...")
             self.root.update()
 
-            # 4. Create Uninstaller batch & registry
             self.register_uninstaller(dest_dir, dest_exe)
 
             self.progress["value"] = 100
@@ -339,16 +309,13 @@ rd /s /q "{install_dir}"
         self.current_step = 5
         self.render_layout()
 
-    # --- SCREEN 5: FINISHED ---
     def show_finished_screen(self):
-        # Left blue panel
         sidebar = tk.Frame(self.main_area, bg=SIDEBAR_BLUE, width=160)
         sidebar.pack(side="left", fill="y")
 
         logo_lbl = tk.Label(sidebar, text="VALORANT\nRPC", font=("Tahoma", 16, "bold"), fg=WIN_WHITE, bg=SIDEBAR_BLUE)
         logo_lbl.pack(pady=40)
 
-        # Right panel
         content = tk.Frame(self.main_area, bg=WIN_WHITE)
         content.pack(side="right", fill="both", expand=True)
 
@@ -373,7 +340,6 @@ rd /s /q "{install_dir}"
         self.root.destroy()
 
 if __name__ == "__main__":
-    # DPI awareness for clean Windows fonts
     try:
         from ctypes import windll
         windll.shcore.SetProcessDpiAwareness(1)
