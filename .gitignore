@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+# We keep the spec file as it's useful, but ignore temporary files
+*.manifest
+*.spec
+
+# Installer & Binaries
+dist/
+
+# Installer files
+valorant-rpc-setup.spec
+
+# Node/Vite build files
+web-ui/node_modules/
+web-ui/dist/
+web-ui/npm-debug.log*
+web-ui/yarn-error.log*
+web-ui/pnpm-debug.log*
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.gemini/
+.antigravityignore
